@@ -208,7 +208,7 @@ st.markdown(f"""
     <div style="display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
         <div>
             <div style="font-size:1.7rem; font-weight:700;">Alouettes Play Predictor</div>
-            <div style="opacity:0.92; margin-top:0.25rem;">Offensive Play Call Probabilities.</div>
+            <div style="opacity:0.92; margin-top:0.25rem;">A situational model that quantifies play-calling tendencies using historical CFL data.</div>
         </div>
         <div>
             <span class="small-pill">Model: {METRICS['model_type']}</span>
