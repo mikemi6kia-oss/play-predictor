@@ -1,1 +1,5 @@
-streamlit\npandas\nnumpy\nscikit-learn\nopenpyxl\n
+streamlit
+pandas
+numpy
+scikit-learn
+openpyxl
