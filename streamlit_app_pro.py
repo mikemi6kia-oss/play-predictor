@@ -207,7 +207,7 @@ st.markdown(f"""
 <div class="main-banner">
     <div style="display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
         <div>
-            <div style="font-size:1.7rem; font-weight:700;">CFL Live Play Predictor Pro</div>
+            <div style="font-size:1.7rem; font-weight:700;">Alouettes Play Predictor</div>
             <div style="opacity:0.92; margin-top:0.25rem;">One-screen in-game decision tool for real-time run vs pass probability.</div>
         </div>
         <div>
