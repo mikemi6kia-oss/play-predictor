@@ -10,7 +10,7 @@ import streamlit as st
 BASE = Path(__file__).resolve().parent
 
 st.set_page_config(
-    page_title="CFL Live Play Predictor Pro",
+    page_title="Alouettes Play Predictor",
     page_icon="🏈",
     layout="wide",
     initial_sidebar_state="expanded"
