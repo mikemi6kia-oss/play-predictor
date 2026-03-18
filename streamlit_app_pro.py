@@ -213,6 +213,7 @@ st.markdown(f"""
         <div>
             <span class="small-pill">Model: {METRICS['model_type']}</span>
             <span class="small-pill">2024 Data</span>
+            <span class="small-pill">V.5.20260310</span>
         </div>
     </div>
 </div>
