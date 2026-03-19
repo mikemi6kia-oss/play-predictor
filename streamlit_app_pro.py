@@ -29,13 +29,25 @@ TEAM_COLORS = {
 }
 
 PRESETS = {
-    "OTT leading late, Opp 30, 2nd & 4": {
-        "team": "Ott", "quarter": 3, "minutes": 7, "seconds": 0,
-        "down": 2, "ytg": 4.0, "field_side": "Opp", "ball_on": 30.0, "score_diff": 7
+    "BC trailing early, Own 50, 1st & 10": {
+        "team": "BC", "quarter": 2, "minutes": 6, "seconds": 19,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -1
     },
-    "WPG 2nd & medium in own territory while leading": {
-        "team": "WPG", "quarter": 3, "minutes": 9, "seconds": 15,
-        "down": 2, "ytg": 6.0, "field_side": "Own", "ball_on": 42.0, "score_diff": 7
+    "CGY trailing early, Own 30, 1st & 10": {
+        "team": "CGY", "quarter": 2 "minutes": 4, "seconds": 0,
+        "down":1, "ytg": 11.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 1
+    },
+    "EDM 2nd Qtr Own 15-30, 1st & 10": {
+        "team": "EDM", "quarter": 2, "minutes": 7, "seconds": 11,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 7
+    },
+    "EDM 2nd Qtr Opp 15 1st & 10": {
+        "team": "EDM", "quarter": 2, "minutes": 5, "seconds": 55,
+        "down": 1, "ytg": 10.0, "field_side": "Opp", "ball_on": 15.0, "score_diff": -1
+    },
+    "EDM 1st Qtr Own 30 1st & 10": {
+        "team": "EDM", "quarter": 1, "minutes": 12, "seconds": 18,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 0
     },
 }
 
