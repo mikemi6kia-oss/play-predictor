@@ -263,14 +263,9 @@ def scan_high_confidence_tendencies():
     return df
 
 def build_reliable_presets():
-if st.button("Generate top 5 tendencies"):
     scan_df = scan_high_confidence_tendencies()
-    
     if scan_df.empty:
-        st.info("No high-confidence model tendencies found.")
-    else:
-        top5_df = scan_df.groupby("team").head(5)
-        st.dataframe(top5_df, use_container_width=True)
+        return {}
 
     best = scan_df.groupby("team", group_keys=False).head(1).copy()
 
@@ -493,40 +488,15 @@ st.divider()
 
 st.subheader("Top 5 high-confidence tendencies per team")
 
-scan_df = scan_high_confidence_tendencies()
+if st.button("Generate top 5 tendencies"):
+    scan_df = scan_high_confidence_tendencies()
 
-if scan_df.empty:
-    st.info("No high-confidence model tendencies found with the current thresholds.")
-else:
-    top5_df = scan_df.groupby("team", group_keys=False).head(5).copy()
+    if scan_df.empty:
+        st.info("No high-confidence model tendencies found with the current thresholds.")
+    else:
+        top5_df = scan_df.groupby("team", group_keys=False).head(5).copy()
 
-    display_df = top5_df[[
-        "team",
-        "rank_within_team",
-        "tendency",
-        "delta_vs_league",
-        "model_pass_prob",
-        "league_pass_rate",
-        "quarter",
-        "minutes",
-        "seconds",
-        "down",
-        "yards_to_go",
-        "field_side",
-        "ball_on",
-        "score_diff",
-        "team_plays",
-        "league_plays",
-        "scenario_label",
-    ]].copy()
-
-    display_df["delta_vs_league"] = display_df["delta_vs_league"].map(lambda x: f"{x:+.1%}")
-    display_df["model_pass_prob"] = display_df["model_pass_prob"].map(lambda x: f"{x:.1%}")
-    display_df["league_pass_rate"] = display_df["league_pass_rate"].map(lambda x: f"{x:.1%}")
-    display_df["clock"] = display_df.apply(lambda r: f'{int(r["minutes"])}:{int(r["seconds"]):02d}', axis=1)
-
-    st.dataframe(
-        display_df[[
+        display_df = top5_df[[
             "team",
             "rank_within_team",
             "tendency",
@@ -534,7 +504,8 @@ else:
             "model_pass_prob",
             "league_pass_rate",
             "quarter",
-            "clock",
+            "minutes",
+            "seconds",
             "down",
             "yards_to_go",
             "field_side",
@@ -543,18 +514,43 @@ else:
             "team_plays",
             "league_plays",
             "scenario_label",
-        ]],
-        use_container_width=True,
-        height=520
-    )
+        ]].copy()
 
-    csv_data = top5_df.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        "Download top 5 tendencies per team (CSV)",
-        data=csv_data,
-        file_name="cfl_top_5_tendencies_per_team.csv",
-        mime="text/csv"
-    )
+        display_df["delta_vs_league"] = display_df["delta_vs_league"].map(lambda x: f"{x:+.1%}")
+        display_df["model_pass_prob"] = display_df["model_pass_prob"].map(lambda x: f"{x:.1%}")
+        display_df["league_pass_rate"] = display_df["league_pass_rate"].map(lambda x: f"{x:.1%}")
+        display_df["clock"] = display_df.apply(lambda r: f'{int(r["minutes"])}:{int(r["seconds"]):02d}', axis=1)
+
+        st.dataframe(
+            display_df[[
+                "team",
+                "rank_within_team",
+                "tendency",
+                "delta_vs_league",
+                "model_pass_prob",
+                "league_pass_rate",
+                "quarter",
+                "clock",
+                "down",
+                "yards_to_go",
+                "field_side",
+                "ball_on",
+                "score_diff",
+                "team_plays",
+                "league_plays",
+                "scenario_label",
+            ]],
+            use_container_width=True,
+            height=520
+        )
+
+        csv_data = top5_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "Download top 5 tendencies per team (CSV)",
+            data=csv_data,
+            file_name="cfl_top_5_tendencies_per_team.csv",
+            mime="text/csv"
+        )
 
 st.divider()
 
