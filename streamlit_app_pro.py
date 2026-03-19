@@ -9,7 +9,7 @@ import streamlit as st
 BASE = Path(__file__).resolve().parent
 
 st.set_page_config(
-    page_title="CFL Live Play Predictor Pro",
+    page_title="CFL Play Frequency Outliers",
     page_icon="🏈",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -342,9 +342,9 @@ st.markdown(f"""
 <div class="main-banner">
     <div style="display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
         <div>
-            <div style="font-size:1.7rem; font-weight:700;">CFL Live Play Predictor Pro</div>
+            <div style="font-size:1.7rem; font-weight:700;">CFL Play Frequency Outliers</div>
             <div style="opacity:0.92; margin-top:0.25rem;">
-                A real-time play prediction engine that uses game context to anticipate offensive tendencies.
+                A data-driven model used to anticipate offensive tendencies.
             </div>
         </div>
         <div>
