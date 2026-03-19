@@ -1,4 +1,3 @@
-
 import json
 import pickle
 from pathlib import Path
@@ -10,7 +9,7 @@ import streamlit as st
 BASE = Path(__file__).resolve().parent
 
 st.set_page_config(
-    page_title="CFL Play Predictor",
+    page_title="CFL Live Play Predictor Pro",
     page_icon="🏈",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -26,77 +25,6 @@ TEAM_COLORS = {
     "SSK": {"bg": "#2E7D32", "fg": "#FFFFFF"},
     "TOR": {"bg": "#1976D2", "fg": "#FFFFFF"},
     "WPG": {"bg": "#003F87", "fg": "#FFFFFF"},
-}
-
-PRESETS = {
-    "BC trailing early, Own 50, 1st & 10": {
-        "team": "BC", "quarter": 2, "minutes": 6, "seconds": 19,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -1
-    },
-    "CGY trailing early, Own 30, 1st & 10": {
-        "team": "CGY", "quarter": 2, "minutes": 4, "seconds": 0,
-        "down":1, "ytg": 11.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 1
-    },
-    "EDM 2nd Qtr Own 15-30, 1st & 10": {
-        "team": "EDM", "quarter": 2, "minutes": 7, "seconds": 11,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 7
-    },
-    "EDM 2nd Qtr Opp 15 1st & 10": {
-        "team": "EDM", "quarter": 2, "minutes": 5, "seconds": 55,
-        "down": 1, "ytg": 10.0, "field_side": "Opp", "ball_on": 15.0, "score_diff": -1
-    },
-    "EDM 1st Qtr Own 30 1st & 10": {
-        "team": "EDM", "quarter": 1, "minutes": 12, "seconds": 18,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 0
-    },
-    "HAM 3rd Qtr Own 10 1st & 10": {
-        "team": "HAM", "quarter": 3, "minutes": 7, "seconds": 4,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 11.0, "score_diff": -11
-    },
-    "HAM 1st Qtr Own 30 1st & 10": {
-        "team": "HAM", "quarter": 1, "minutes": 11, "seconds": 17,
-        "down": 1, "ytg": 11.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 10
-    },
-    "HAM 1st Qtr Own 50 1st & 10": {
-        "team": "HAM", "quarter": 1, "minutes": 8, "seconds": 16,
-        "down": 1, "ytg": 11.0, "field_side": "Own", "ball_on": 48.0, "score_diff": 1
-    },
-    "MTL 4th Qtr Own 30 1st & 10": {
-        "team": "MTL", "quarter": 4, "minutes": 8, "seconds": 48,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 31.0, "score_diff": -9
-    },
-    "MTL 4th Qtr Own 50 1st & 10": {
-        "team": "MTL", "quarter": 4, "minutes": 7, "seconds": 36,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -1
-    },
-    "SSK 2nd Qtr Own 30 1st & 10": {
-        "team": "SSK", "quarter": 2, "minutes": 7, "seconds": 53,
-        "down": 1, "ytg": 11.0, "field_side": "OPP", "ball_on": 15.0, "score_diff": 0
-    },
-    "SSK 1st Qtr Own 50 1st & 10": {
-        "team": "SSK", "quarter": 1, "minutes": 7, "seconds": 19,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -7
-    },
-    "TOR 1st Qtr Opp 15 1st & 10": {
-        "team": "TOR", "quarter": 1, "minutes": 10, "seconds": 44,
-        "down": 1, "ytg": 10.0, "field_side": "Opp", "ball_on": 15.0, "score_diff": 0
-    },
-    "TOR 1st Qtr Own 30 1st & 10": {
-        "team": "TOR", "quarter": 1, "minutes": 11, "seconds": 58,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 7
-    },
-    "TOR 3rd Qtr Opp 30 1st & 10": {
-        "team": "TOR", "quarter": 3, "minutes": 6, "seconds": 37,
-        "down": 1, "ytg": 10.0, "field_side": "Opp", "ball_on": 30.0, "score_diff": 8
-    },
-    "WPG 4th Qtr Own 33 1st & 10": {
-        "team": "WPG", "quarter": 4, "minutes": 7, "seconds": 37,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 7
-    },
-    "WPG 4th Qtr Own 49 1st & 10": {
-        "team": "WPG", "quarter": 4, "minutes": 8, "seconds": 46,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 49.0, "score_diff": -2
-    },
 }
 
 @st.cache_resource
@@ -175,6 +103,7 @@ def get_bucket_lookup(team, down, ytg, yte, score_diff, sec_half):
     fb = field_bucket(yte)
     sb = score_bucket(score_diff)
     tmb = time_bucket(sec_half)
+
     subset = TEAM_LOOKUP[
         (TEAM_LOOKUP["possession_team"] == team) &
         (TEAM_LOOKUP["down"] == down) &
@@ -183,6 +112,7 @@ def get_bucket_lookup(team, down, ytg, yte, score_diff, sec_half):
         (TEAM_LOOKUP["score_bucket"] == sb) &
         (TEAM_LOOKUP["time_bucket"] == tmb)
     ].copy()
+
     if subset.empty:
         return None
     return subset.sort_values("plays", ascending=False).iloc[0].to_dict()
@@ -192,6 +122,7 @@ def get_comparables(team, quarter, down, ytg, yte, sec_half, score_diff, top_n=1
     d = d[(d["possession_team"] == team) & (d["down"] == down)]
     if d.empty:
         return d
+
     d["distance_score"] = (
         ((d["quarter"] - quarter) / 1.0) ** 2 +
         ((d["yards_to_go"] - ytg) / 4.0) ** 2 +
@@ -207,14 +138,170 @@ def get_comparables(team, quarter, down, ytg, yte, sec_half, score_diff, top_n=1
         "score_diff_offense", "distance_score"
     ]]
 
+def compute_model_delta(team, quarter, minutes, seconds, down, ytg, field_side, ball_on, score_diff):
+    yte = yards_to_endzone_from_ball_on(field_side, ball_on)
+    sec_half = half_seconds_from_quarter_clock(quarter, minutes, seconds)
+
+    x = pd.DataFrame([{
+        "possession_team": team,
+        "quarter": quarter,
+        "down": down,
+        "yards_to_go": ytg,
+        "yards_to_endzone": yte,
+        "seconds_in_half_remaining": sec_half,
+        "score_diff_offense": score_diff
+    }])
+
+    model_pass_prob = float(MODEL.predict_proba(x)[0, 1])
+    lookup = get_bucket_lookup(team, down, ytg, yte, score_diff, sec_half)
+
+    if lookup is not None:
+        league_pass_rate = float(lookup["league_pass_prob_hist"])
+        team_plays = int(lookup["plays"])
+        league_plays = int(lookup["league_plays"])
+        model_delta_vs_league = model_pass_prob - league_pass_rate
+    else:
+        league_pass_rate = None
+        team_plays = 0
+        league_plays = 0
+        model_delta_vs_league = None
+
+    return {
+        "model_pass_prob": model_pass_prob,
+        "league_pass_rate": league_pass_rate,
+        "model_delta_vs_league": model_delta_vs_league,
+        "team_plays": team_plays,
+        "league_plays": league_plays,
+        "lookup": lookup,
+        "yte": yte,
+        "sec_half": sec_half,
+    }
+
+@st.cache_data(show_spinner=False)
+def scan_high_confidence_tendencies():
+    rows = []
+
+    quarters = [1, 2, 3, 4]
+    downs = [1, 2]
+    minutes_list = [12, 9, 6, 3]
+    seconds_list = [0]
+    ytg_values = [2.0, 5.0, 10.0]
+    field_sides = ["Own", "Opp"]
+    ball_on_values = [15.0, 30.0, 45.0]
+    score_diffs = [-10, -3, 0, 3, 10]
+
+    for team in TEAMS:
+        for q in quarters:
+            for d in downs:
+                for mins in minutes_list:
+                    for secs in seconds_list:
+                        for ytg in ytg_values:
+                            for side in field_sides:
+                                for ball in ball_on_values:
+                                    for score in score_diffs:
+                                        try:
+                                            info = compute_model_delta(
+                                                team=team,
+                                                quarter=q,
+                                                minutes=mins,
+                                                seconds=secs,
+                                                down=d,
+                                                ytg=ytg,
+                                                field_side=side,
+                                                ball_on=ball,
+                                                score_diff=score,
+                                            )
+
+                                            delta = info["model_delta_vs_league"]
+                                            if delta is None:
+                                                continue
+
+                                            if (
+                                                abs(delta) >= 0.20 and
+                                                info["team_plays"] >= 10 and
+                                                info["league_plays"] >= 20
+                                            ):
+                                                tendency = "Pass-heavy" if delta > 0 else "Run-heavy"
+                                                rows.append({
+                                                    "team": team,
+                                                    "quarter": q,
+                                                    "minutes": mins,
+                                                    "seconds": secs,
+                                                    "down": d,
+                                                    "yards_to_go": ytg,
+                                                    "field_side": side,
+                                                    "ball_on": ball,
+                                                    "score_diff": score,
+                                                    "model_pass_prob": info["model_pass_prob"],
+                                                    "league_pass_rate": info["league_pass_rate"],
+                                                    "delta_vs_league": delta,
+                                                    "tendency": tendency,
+                                                    "team_plays": info["team_plays"],
+                                                    "league_plays": info["league_plays"],
+                                                })
+                                        except Exception:
+                                            continue
+
+    if not rows:
+        return pd.DataFrame()
+
+    df = pd.DataFrame(rows)
+    df["abs_delta"] = df["delta_vs_league"].abs()
+    df = df.sort_values(["team", "abs_delta"], ascending=[True, False]).reset_index(drop=True)
+    df["rank_within_team"] = df.groupby("team").cumcount() + 1
+    df["scenario_label"] = df.apply(
+        lambda r: (
+            f'{r["team"]} | {r["tendency"]} | Δ {r["delta_vs_league"]:+.1%} | '
+            f'Q{int(r["quarter"])} {int(r["minutes"])}:{int(r["seconds"]):02d} | '
+            f'{int(r["down"])} & {int(r["yards_to_go"])} | '
+            f'{r["field_side"]} {int(r["ball_on"])} | '
+            f'{int(r["score_diff"]):+d} | '
+            f'N={int(r["team_plays"])}/{int(r["league_plays"])}'
+        ),
+        axis=1
+    )
+    return df
+
+def build_reliable_presets():
+    scan_df = scan_high_confidence_tendencies()
+    if scan_df.empty:
+        return {}
+
+    best = scan_df.groupby("team", group_keys=False).head(1).copy()
+
+    presets = {}
+    for _, r in best.iterrows():
+        presets[r["scenario_label"]] = {
+            "team": r["team"],
+            "quarter": int(r["quarter"]),
+            "minutes": int(r["minutes"]),
+            "seconds": int(r["seconds"]),
+            "down": int(r["down"]),
+            "ytg": float(r["yards_to_go"]),
+            "field_side": r["field_side"],
+            "ball_on": float(r["ball_on"]),
+            "score_diff": int(r["score_diff"]),
+        }
+    return presets
+
+PRESETS = build_reliable_presets()
+
 def set_preset(preset_name):
     p = PRESETS[preset_name]
     for k, v in p.items():
         st.session_state[k] = v
 
+# Session defaults
 for k, v in {
-    "team": "WPG", "quarter": 1, "minutes": 4, "seconds": 0, "down": 1,
-    "ytg": 10.0, "field_side": "Own", "ball_on": 30.0, "score_diff": -10
+    "team": "WPG",
+    "quarter": 1,
+    "minutes": 4,
+    "seconds": 0,
+    "down": 1,
+    "ytg": 10.0,
+    "field_side": "Own",
+    "ball_on": 30.0,
+    "score_diff": -10
 }.items():
     st.session_state.setdefault(k, v)
 
@@ -255,13 +342,15 @@ st.markdown(f"""
 <div class="main-banner">
     <div style="display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
         <div>
-            <div style="font-size:1.7rem; font-weight:700;">CFL Play Predictor</div>
-            <div style="opacity:0.92; margin-top:0.25rem;">A model that estimates play-calling tendencies from game context.</div>
+            <div style="font-size:1.7rem; font-weight:700;">CFL Live Play Predictor Pro</div>
+            <div style="opacity:0.92; margin-top:0.25rem;">
+                A real-time play prediction engine that uses game context to anticipate offensive tendencies.
+            </div>
         </div>
         <div>
             <span class="small-pill">Model: {METRICS['model_type']}</span>
             <span class="small-pill">2024 Data</span>
-            <span class="small-pill">V.5.20260310</span>
+            <span class="small-pill">v1.0</span>
         </div>
     </div>
 </div>
@@ -269,10 +358,14 @@ st.markdown(f"""
 
 with st.sidebar:
     st.header("Game Inputs")
-    preset = st.selectbox("Quick preset", ["Custom"] + list(PRESETS.keys()))
-    if preset != "Custom":
-        if st.button("Load preset", use_container_width=True):
-            set_preset(preset)
+
+    if PRESETS:
+        preset = st.selectbox("High-confidence tendency preset", ["Custom"] + list(PRESETS.keys()))
+        if preset != "Custom":
+            if st.button("Load preset", use_container_width=True):
+                set_preset(preset)
+    else:
+        st.warning("No high-confidence presets found in the current scan grid.")
 
     st.selectbox("Offense team", TEAMS, key="team")
     st.selectbox("Quarter", [1, 2, 3, 4], key="quarter")
@@ -285,6 +378,7 @@ with st.sidebar:
     st.number_input("Score diff (offense perspective)", min_value=-60, max_value=60, step=1, key="score_diff")
     st.caption("Negative = offense trailing")
 
+# Current inputs
 team = st.session_state["team"]
 quarter = st.session_state["quarter"]
 minutes = st.session_state["minutes"]
@@ -295,24 +389,21 @@ field_side = st.session_state["field_side"]
 ball_on = float(st.session_state["ball_on"])
 score_diff = int(st.session_state["score_diff"])
 
-yte = yards_to_endzone_from_ball_on(field_side, ball_on)
-sec_half = half_seconds_from_quarter_clock(quarter, minutes, seconds)
+# Model + lookup
+model_info = compute_model_delta(team, quarter, minutes, seconds, down, ytg, field_side, ball_on, score_diff)
+lookup = model_info["lookup"]
+comparables = get_comparables(
+    team=team,
+    quarter=quarter,
+    down=down,
+    ytg=ytg,
+    yte=model_info["yte"],
+    sec_half=model_info["sec_half"],
+    score_diff=score_diff
+)
 
-x = pd.DataFrame([{
-    "possession_team": team,
-    "quarter": quarter,
-    "down": down,
-    "yards_to_go": ytg,
-    "yards_to_endzone": yte,
-    "seconds_in_half_remaining": sec_half,
-    "score_diff_offense": score_diff
-}])
-
-pass_prob = float(MODEL.predict_proba(x)[0, 1])
+pass_prob = model_info["model_pass_prob"]
 run_prob = 1 - pass_prob
-
-lookup = get_bucket_lookup(team, down, ytg, yte, score_diff, sec_half)
-comparables = get_comparables(team, quarter, down, ytg, yte, sec_half, score_diff)
 
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("Pass probability", f"{pass_prob:.1%}")
@@ -326,37 +417,50 @@ with left:
     st.subheader("Situation snapshot")
     s1, s2, s3, s4 = st.columns(4)
     s1.info(f"**Distance**\n\n{distance_bucket(ytg)}")
-    s2.info(f"**Field**\n\n{field_bucket(yte)}")
+    s2.info(f"**Field**\n\n{field_bucket(model_info['yte'])}")
     s3.info(f"**Score**\n\n{score_bucket(score_diff)}")
-    s4.info(f"**Time**\n\n{time_bucket(sec_half)}")
+    s4.info(f"**Time**\n\n{time_bucket(model_info['sec_half'])}")
 
-    st.subheader("Historical tendency vs league")
-    if lookup:
+    st.subheader("Model vs league")
+    if lookup is not None and model_info["league_pass_rate"] is not None:
         a, b, c = st.columns(3)
-        a.metric("Team bucket pass rate", f"{lookup['pass_prob_hist']:.1%}")
-        b.metric("League bucket pass rate", f"{lookup['league_pass_prob_hist']:.1%}")
-        c.metric("Delta vs league", f"{lookup['pass_prob_delta_vs_league']:+.1%}")
-        st.caption(f"Sample size: {int(lookup['plays'])} team plays in this bucket, {int(lookup['league_plays'])} league plays.")
+        a.metric("Model pass probability", f"{model_info['model_pass_prob']:.1%}")
+        b.metric("League bucket pass rate", f"{model_info['league_pass_rate']:.1%}")
+        c.metric("Delta vs league", f"{model_info['model_delta_vs_league']:+.1%}")
+        st.caption(
+            f"Sample size: {int(lookup['plays'])} team plays in this bucket, "
+            f"{int(lookup['league_plays'])} league plays."
+        )
     else:
-        st.warning("No exact historical bucket match found. Model output still works; treat the historical layer with caution.")
+        st.warning("No exact historical bucket match found. Model output still works, but no league bucket baseline is available.")
 
     st.subheader("Defensive read")
-    if pass_prob >= 0.70:
-        st.success("Strong pass tendency. Pressure package and quick-game alerts are justified.")
-    elif pass_prob >= 0.58:
-        st.info("Moderate pass lean. Guard against dropback while staying honest to draw/screen risk.")
-    elif run_prob >= 0.70:
-        st.success("Strong run tendency. Consider box count, edge fit, and motion discipline.")
-    elif run_prob >= 0.58:
-        st.info("Moderate run lean. Balanced front with run-first eyes.")
+    delta = model_info["model_delta_vs_league"]
+
+    if delta is not None:
+        if delta >= 0.20:
+            st.success("High pass tendency vs league. This is a meaningful pass-heavy spot.")
+        elif delta >= 0.10:
+            st.info("Moderate pass lean vs league.")
+        elif delta <= -0.20:
+            st.success("High run tendency vs league. This is a meaningful run-heavy spot.")
+        elif delta <= -0.10:
+            st.info("Moderate run lean vs league.")
+        else:
+            st.info("No major tendency edge vs league in this specific scenario.")
     else:
-        st.info("Mixed tendency. Use comparables and bucket history to avoid overcommitting.")
+        if pass_prob >= 0.70:
+            st.success("Strong pass tendency from the model, but no matching league bucket was found.")
+        elif run_prob >= 0.70:
+            st.success("Strong run tendency from the model, but no matching league bucket was found.")
+        else:
+            st.info("Mixed tendency and no league comparison available.")
 
     st.subheader("Coaching notes")
     notes = [
         f"{team} is in a {distance_bucket(ytg).lower()} distance spot.",
-        f"Field state is {field_bucket(yte).lower()}, with score state {score_bucket(score_diff).lower()}.",
-        "This tool is strongest as a between-snaps decision support layer, not a replacement for film or personnel tags."
+        f"Field state is {field_bucket(model_info['yte']).lower()}, with score state {score_bucket(score_diff).lower()}.",
+        "This view compares the model's prediction directly against the league rate for the same situation bucket."
     ]
     for n in notes:
         st.write(f"- {n}")
@@ -368,8 +472,8 @@ with right:
 **Game state:** Q{quarter}, {minutes}:{str(seconds).zfill(2)} left  
 **Situation:** {down} & {ytg:g} at {field_side.lower()} {ball_on:g}  
 **Score diff (offense):** {score_diff:+d}  
-**Derived yards_to_endzone:** {yte:.1f}  
-**Derived seconds_in_half_remaining:** {sec_half}
+**Derived yards_to_endzone:** {model_info['yte']:.1f}  
+**Derived seconds_in_half_remaining:** {model_info['sec_half']}
 """)
 
     st.subheader("Closest historical comparables")
@@ -379,6 +483,73 @@ with right:
         view = comparables.copy()
         view["distance_score"] = view["distance_score"].round(3)
         st.dataframe(view, use_container_width=True, height=460)
+
+st.divider()
+
+st.subheader("Top 5 high-confidence tendencies per team")
+
+scan_df = scan_high_confidence_tendencies()
+
+if scan_df.empty:
+    st.info("No high-confidence model tendencies found with the current thresholds.")
+else:
+    top5_df = scan_df.groupby("team", group_keys=False).head(5).copy()
+
+    display_df = top5_df[[
+        "team",
+        "rank_within_team",
+        "tendency",
+        "delta_vs_league",
+        "model_pass_prob",
+        "league_pass_rate",
+        "quarter",
+        "minutes",
+        "seconds",
+        "down",
+        "yards_to_go",
+        "field_side",
+        "ball_on",
+        "score_diff",
+        "team_plays",
+        "league_plays",
+        "scenario_label",
+    ]].copy()
+
+    display_df["delta_vs_league"] = display_df["delta_vs_league"].map(lambda x: f"{x:+.1%}")
+    display_df["model_pass_prob"] = display_df["model_pass_prob"].map(lambda x: f"{x:.1%}")
+    display_df["league_pass_rate"] = display_df["league_pass_rate"].map(lambda x: f"{x:.1%}")
+    display_df["clock"] = display_df.apply(lambda r: f'{int(r["minutes"])}:{int(r["seconds"]):02d}', axis=1)
+
+    st.dataframe(
+        display_df[[
+            "team",
+            "rank_within_team",
+            "tendency",
+            "delta_vs_league",
+            "model_pass_prob",
+            "league_pass_rate",
+            "quarter",
+            "clock",
+            "down",
+            "yards_to_go",
+            "field_side",
+            "ball_on",
+            "score_diff",
+            "team_plays",
+            "league_plays",
+            "scenario_label",
+        ]],
+        use_container_width=True,
+        height=520
+    )
+
+    csv_data = top5_df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        "Download top 5 tendencies per team (CSV)",
+        data=csv_data,
+        file_name="cfl_top_5_tendencies_per_team.csv",
+        mime="text/csv"
+    )
 
 st.divider()
 
