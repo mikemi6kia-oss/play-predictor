@@ -34,7 +34,7 @@ PRESETS = {
         "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -1
     },
     "CGY trailing early, Own 30, 1st & 10": {
-        "team": "CGY", "quarter": 2 "minutes": 4, "seconds": 0,
+        "team": "CGY", "quarter": 2, "minutes": 4, "seconds": 0,
         "down":1, "ytg": 11.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 1
     },
     "EDM 2nd Qtr Own 15-30, 1st & 10": {
