@@ -53,6 +53,50 @@ PRESETS = {
         "team": "HAM", "quarter": 3, "minutes": 7, "seconds": 4,
         "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 11.0, "score_diff": -11
     },
+    "HAM 1st Qtr Own 30 1st & 10": {
+        "team": "HAM", "quarter": 1, "minutes": 11, "seconds": 17,
+        "down": 1, "ytg": 11.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 10
+    },
+    "HAM 1st Qtr Own 50 1st & 10": {
+        "team": "HAM", "quarter": 1, "minutes": 8, "seconds": 16,
+        "down": 1, "ytg": 11.0, "field_side": "Own", "ball_on": 48.0, "score_diff": 1
+    },
+    "MTL 4th Qtr Own 30 1st & 10": {
+        "team": "MTL", "quarter": 4, "minutes": 8, "seconds": 48,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 31.0, "score_diff": -9
+    },
+    "MTL 4th Qtr Own 50 1st & 10": {
+        "team": "MTL", "quarter": 4, "minutes": 7, "seconds": 36,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -1
+    },
+    "SSK 2nd Qtr Own 30 1st & 10": {
+        "team": "SSK", "quarter": 2, "minutes": 7, "seconds": 53,
+        "down": 1, "ytg": 11.0, "field_side": "OPP", "ball_on": 15.0, "score_diff": 0
+    },
+    "SSK 1st Qtr Own 50 1st & 10": {
+        "team": "SSK", "quarter": 1, "minutes": 7, "seconds": 19,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 50.0, "score_diff": -7
+    },
+    "TOR 1st Qtr Opp 15 1st & 10": {
+        "team": "TOR", "quarter": 1, "minutes": 10, "seconds": 44,
+        "down": 1, "ytg": 10.0, "field_side": "Opp", "ball_on": 15.0, "score_diff": 0
+    },
+    "TOR 1st Qtr Own 30 1st & 10": {
+        "team": "TOR", "quarter": 1, "minutes": 11, "seconds": 58,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 31.0, "score_diff": 7
+    },
+    "TOR 3rd Qtr Opp 30 1st & 10": {
+        "team": "TOR", "quarter": 3, "minutes": 6, "seconds": 37,
+        "down": 1, "ytg": 10.0, "field_side": "Opp", "ball_on": 30.0, "score_diff": 8
+    },
+    "WPG 4th Qtr Own 33 1st & 10": {
+        "team": "WPG", "quarter": 4, "minutes": 7, "seconds": 37,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 7
+    },
+    "WPG 4th Qtr Own 49 1st & 10": {
+        "team": "WPG", "quarter": 4, "minutes": 8, "seconds": 46,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 49.0, "score_diff": -2
+    },
 }
 
 @st.cache_resource
