@@ -29,25 +29,13 @@ TEAM_COLORS = {
 }
 
 PRESETS = {
-    "WPG trailing early, own 30, 1st & 10": {
-        "team": "WPG", "quarter": 1, "minutes": 4, "seconds": 0,
-        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 30.0, "score_diff": -10
+    "OTT leading late, Opp 30, 2nd & 4": {
+        "team": "Ott", "quarter": 3, "minutes": 7, "seconds": 0,
+        "down": 2, "ytg": 4.0, "field_side": "Opp", "ball_on": 30.0, "score_diff": 7
     },
     "WPG 2nd & medium in own territory while leading": {
         "team": "WPG", "quarter": 3, "minutes": 9, "seconds": 15,
         "down": 2, "ytg": 6.0, "field_side": "Own", "ball_on": 42.0, "score_diff": 7
-    },
-    "MTL red-zone 1st down while trailing": {
-        "team": "MTL", "quarter": 4, "minutes": 6, "seconds": 40,
-        "down": 1, "ytg": 8.0, "field_side": "Opp", "ball_on": 14.0, "score_diff": -6
-    },
-    "BC late-half midfield 2nd & long": {
-        "team": "BC", "quarter": 2, "minutes": 1, "seconds": 42,
-        "down": 2, "ytg": 11.0, "field_side": "Own", "ball_on": 54.0, "score_diff": 3
-    },
-    "TOR short-yardage in opponent territory": {
-        "team": "TOR", "quarter": 2, "minutes": 7, "seconds": 5,
-        "down": 2, "ytg": 2.0, "field_side": "Opp", "ball_on": 34.0, "score_diff": 0
     },
 }
 
