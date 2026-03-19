@@ -49,6 +49,10 @@ PRESETS = {
         "team": "EDM", "quarter": 1, "minutes": 12, "seconds": 18,
         "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 33.0, "score_diff": 0
     },
+    "HAM 3rd Qtr Own 10 1st & 10": {
+        "team": "HAM", "quarter": 3, "minutes": 7, "seconds": 04,
+        "down": 1, "ytg": 10.0, "field_side": "Own", "ball_on": 11.0, "score_diff": -11
+    },
 }
 
 @st.cache_resource
