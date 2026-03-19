@@ -263,9 +263,14 @@ def scan_high_confidence_tendencies():
     return df
 
 def build_reliable_presets():
+if st.button("Generate top 5 tendencies"):
     scan_df = scan_high_confidence_tendencies()
+    
     if scan_df.empty:
-        return {}
+        st.info("No high-confidence model tendencies found.")
+    else:
+        top5_df = scan_df.groupby("team").head(5)
+        st.dataframe(top5_df, use_container_width=True)
 
     best = scan_df.groupby("team", group_keys=False).head(1).copy()
 
