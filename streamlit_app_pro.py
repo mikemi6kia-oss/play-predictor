@@ -263,7 +263,7 @@ def scan_high_confidence_tendencies():
     return df
 
 def build_reliable_presets():
-if st.button("Generate top 5 tendencies"):
+st.button("Generate top 5 tendencies"):
     scan_df = scan_high_confidence_tendencies()
     
     if scan_df.empty:
