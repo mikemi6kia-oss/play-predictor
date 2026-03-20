@@ -9,7 +9,7 @@ import streamlit as st
 BASE = Path(__file__).resolve().parent
 
 st.set_page_config(
-    page_title="CFL Play Frequency Outliers",
+    page_title="CFL Live Play Predictor Pro",
     page_icon="🏈",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -117,7 +117,7 @@ def get_bucket_lookup(team, down, ytg, yte, score_diff, sec_half):
         return None
     return subset.sort_values("plays", ascending=False).iloc[0].to_dict()
 
-def get_comparables(team, quarter, down, ytg, yte, sec_half, score_diff, top_n=12):
+def get_comparables(team, quarter, down, ytg, yte, sec_half, score_diff, top_n=10):
     d = COMPS.copy()
     d = d[(d["possession_team"] == team) & (d["down"] == down)]
     if d.empty:
@@ -262,35 +262,6 @@ def scan_high_confidence_tendencies():
     )
     return df
 
-def build_reliable_presets():
-    scan_df = scan_high_confidence_tendencies()
-    if scan_df.empty:
-        return {}
-
-    best = scan_df.groupby("team", group_keys=False).head(1).copy()
-
-    presets = {}
-    for _, r in best.iterrows():
-        presets[r["scenario_label"]] = {
-            "team": r["team"],
-            "quarter": int(r["quarter"]),
-            "minutes": int(r["minutes"]),
-            "seconds": int(r["seconds"]),
-            "down": int(r["down"]),
-            "ytg": float(r["yards_to_go"]),
-            "field_side": r["field_side"],
-            "ball_on": float(r["ball_on"]),
-            "score_diff": int(r["score_diff"]),
-        }
-    return presets
-
-PRESETS = build_reliable_presets()
-
-def set_preset(preset_name):
-    p = PRESETS[preset_name]
-    for k, v in p.items():
-        st.session_state[k] = v
-
 # Session defaults
 for k, v in {
     "team": "WPG",
@@ -311,13 +282,13 @@ colors = TEAM_COLORS.get(team, {"bg": "#1f2937", "fg": "#ffffff"})
 st.markdown(f"""
 <style>
 .block-container {{
-    padding-top: 1.2rem;
-    padding-bottom: 1.2rem;
+    padding-top: 1.0rem;
+    padding-bottom: 1.0rem;
 }}
 .main-banner {{
     background: linear-gradient(135deg, {colors['bg']} 0%, #0f172a 100%);
     color: {colors['fg']};
-    padding: 1.2rem 1.4rem;
+    padding: 1.1rem 1.3rem;
     border-radius: 18px;
     margin-bottom: 1rem;
 }}
@@ -342,9 +313,9 @@ st.markdown(f"""
 <div class="main-banner">
     <div style="display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
         <div>
-            <div style="font-size:1.7rem; font-weight:700;">CFL Play Frequency Outliers</div>
+            <div style="font-size:1.7rem; font-weight:700;">CFL Live Play Predictor Pro</div>
             <div style="opacity:0.92; margin-top:0.25rem;">
-                A data-driven model used to anticipate offensive tendencies.
+                A real-time play prediction engine that uses game context to anticipate offensive tendencies.
             </div>
         </div>
         <div>
@@ -358,15 +329,6 @@ st.markdown(f"""
 
 with st.sidebar:
     st.header("Game Inputs")
-
-    if PRESETS:
-        preset = st.selectbox("High-confidence tendency preset", ["Custom"] + list(PRESETS.keys()))
-        if preset != "Custom":
-            if st.button("Load preset", use_container_width=True):
-                set_preset(preset)
-    else:
-        st.warning("No high-confidence presets found in the current scan grid.")
-
     st.selectbox("Offense team", TEAMS, key="team")
     st.selectbox("Quarter", [1, 2, 3, 4], key="quarter")
     st.number_input("Minutes left in quarter", min_value=0, max_value=15, step=1, key="minutes")
@@ -411,7 +373,7 @@ m2.metric("Run probability", f"{run_prob:.1%}")
 m3.metric("Model accuracy", f"{METRICS['accuracy_at_0_5_threshold']:.1%}")
 m4.metric("Bucket sample", f"{int(lookup['plays']) if lookup else 0}")
 
-left, right = st.columns([1.08, 0.92])
+left, right = st.columns([1.02, 0.98])
 
 with left:
     st.subheader("Situation snapshot")
@@ -434,36 +396,17 @@ with left:
     else:
         st.warning("No exact historical bucket match found. Model output still works, but no league bucket baseline is available.")
 
-    st.subheader("Defensive read")
+    st.subheader("High tendency alerts")
     delta = model_info["model_delta_vs_league"]
 
-    if delta is not None:
-        if delta >= 0.20:
-            st.success("High pass tendency vs league. This is a meaningful pass-heavy spot.")
-        elif delta >= 0.10:
-            st.info("Moderate pass lean vs league.")
-        elif delta <= -0.20:
-            st.success("High run tendency vs league. This is a meaningful run-heavy spot.")
-        elif delta <= -0.10:
-            st.info("Moderate run lean vs league.")
-        else:
-            st.info("No major tendency edge vs league in this specific scenario.")
+    if delta is None:
+        st.info("No league comparison alert available for this exact situation bucket.")
+    elif delta >= 0.20:
+        st.warning(f"Pass-heavy outlier alert: model is {delta:+.1%} vs league average in this scenario.")
+    elif delta <= -0.20:
+        st.warning(f"Run-heavy outlier alert: model is {delta:+.1%} vs league average in this scenario.")
     else:
-        if pass_prob >= 0.70:
-            st.success("Strong pass tendency from the model, but no matching league bucket was found.")
-        elif run_prob >= 0.70:
-            st.success("Strong run tendency from the model, but no matching league bucket was found.")
-        else:
-            st.info("Mixed tendency and no league comparison available.")
-
-    st.subheader("Coaching notes")
-    notes = [
-        f"{team} is in a {distance_bucket(ytg).lower()} distance spot.",
-        f"Field state is {field_bucket(model_info['yte']).lower()}, with score state {score_bucket(score_diff).lower()}.",
-        "This view compares the model's prediction directly against the league rate for the same situation bucket."
-    ]
-    for n in notes:
-        st.write(f"- {n}")
+        st.info("No major outlier alert. Current scenario is within ±20% of league average.")
 
 with right:
     st.subheader("Live scenario summary")
@@ -482,7 +425,7 @@ with right:
     else:
         view = comparables.copy()
         view["distance_score"] = view["distance_score"].round(3)
-        st.dataframe(view, use_container_width=True, height=460)
+        st.dataframe(view, use_container_width=True, height=430)
 
 st.divider()
 
