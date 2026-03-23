@@ -344,6 +344,17 @@ st.markdown(f"""
     margin-bottom: 1rem;
 }}
 
+.small-pill {{
+    display: inline-block;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.16);
+    margin-right: 0.4rem;
+    font-size: 0.9rem;
+}}
+
+👉 ADD THIS PART RIGHT HERE 👇
+
 .banner-grid {{
     display: grid;
     grid-template-columns: 1.2fr 0.9fr 0.9fr;
@@ -362,7 +373,6 @@ st.markdown(f"""
 .banner-team-name {{
     font-size: 1.15rem;
     font-weight: 700;
-    line-height: 1.2;
 }}
 
 .banner-team-sub {{
@@ -383,14 +393,7 @@ st.markdown(f"""
     text-align: right;
 }}
 
-.small-pill {{
-    display: inline-block;
-    padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.16);
-    margin-left: 0.4rem;
-    font-size: 0.9rem;
-}}
+👉 END OF NEW PART
 
 div[data-testid="stMetric"] {{
     background: #f8fafc;
@@ -399,21 +402,15 @@ div[data-testid="stMetric"] {{
     border-radius: 16px;
 }}
 
-div[data-testid="stMetric"] label,
-div[data-testid="stMetric"] [data-testid="stMetricLabel"] {{
-    color: #334155 !important;
-}}
-
-div[data-testid="stMetric"] [data-testid="stMetricValue"] {{
-    color: #0f172a !important;
-    font-weight: 700 !important;
-}}
-
-div[data-testid="stMetric"] [data-testid="stMetricDelta"] {{
-    color: #475569 !important;
-}}
 </style>
 """, unsafe_allow_html=True)
+
+team_name = TEAM_NAMES.get(team, team)
+logo_b64 = get_logo_base64(team)
+
+logo_html = ""
+if logo_b64:
+    logo_html = f'<img class="team-logo" src="data:image/png;base64,{logo_b64}" alt="{team_name} logo" />'
 
 team_name = TEAM_NAMES.get(team, team)
 logo_b64 = get_logo_base64(team)
@@ -443,7 +440,7 @@ st.markdown(f"""
         <div class="banner-right">
             <span class="small-pill">Model: {METRICS['model_type']}</span>
             <span class="small-pill">2024 CFL Data</span>
-            <span class="small-pill">v1.0.20250323</span>
+            <span class="small-pill">v10.20250323</span>
         </div>
     </div>
 </div>
