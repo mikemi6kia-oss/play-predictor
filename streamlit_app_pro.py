@@ -330,8 +330,8 @@ st.markdown(f"""
         </div>
         <div>
             <span class="small-pill">Model: {METRICS['model_type']}</span>
-            <span class="small-pill">2024 Data</span>
-            <span class="small-pill">v1.0</span>
+            <span class="small-pill">2024 CFL Data</span>
+            <span class="small-pill">v10.20250323</span>
         </div>
     </div>
 </div>
