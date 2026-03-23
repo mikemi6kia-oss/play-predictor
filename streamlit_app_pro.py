@@ -15,6 +15,11 @@ def get_logo_base64(team_code):
             return base64.b64encode(f.read()).decode("utf-8")
     return None
 
+def get_logo_path(team_code):
+    logo_rel = TEAM_LOGOS.get(team_code, "")
+    logo_path = BASE / logo_rel
+    return logo_path if logo_path.exists() else None
+
 BASE = Path(__file__).resolve().parent
 
 st.set_page_config(
@@ -337,60 +342,40 @@ st.markdown(f"""
     padding-bottom: 1.0rem;
 }}
 
-.main-banner {{
-    background: linear-gradient(135deg, {colors['bg']} 0%, #0f172a 100%);
-    color: {colors['fg']};
-    padding: 1.1rem 1.3rem;
-    border-radius: 18px;
+.banner-shell {{
+    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+    border: 1px solid #1f2937;
+    border-radius: 22px;
+    padding: 20px 22px;
     margin-bottom: 1rem;
 }}
 
-.small-pill {{
-    display: inline-block;
-    padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.16);
-    margin-right: 0.4rem;
-    font-size: 0.9rem;
+.banner-title {{
+    color: white;
+    font-size: 2.0rem;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 0.45rem;
 }}
 
-.banner-grid {{
-    display: grid;
-    grid-template-columns: 1.2fr 0.9fr 0.9fr;
-    align-items: center;
-    gap: 1rem;
-}}
-
-.banner-center {{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    text-align: center;
+.banner-subtitle {{
+    color: #cbd5e1;
+    font-size: 1rem;
 }}
 
 .banner-team-name {{
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.2;
-}}
-
-.banner-team-sub {{
-    font-size: 0.82rem;
-    opacity: 0.88;
-}}
-
-.team-logo {{
-    width: 52px;
-    height: 52px;
-    object-fit: contain;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.08);
-    padding: 6px;
-}}
-
-.banner-right {{
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
     text-align: right;
+}}
+
+.banner-team-label {{
+    color: #94a3b8;
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 0.35rem;
 }}
 
 div[data-testid="stMetric"] {{
@@ -417,40 +402,37 @@ div[data-testid="stMetric"] [data-testid="stMetricDelta"] {{
 """, unsafe_allow_html=True)
 
 team_name = TEAM_NAMES.get(team, team)
-logo_b64 = get_logo_base64(team)
+logo_path = get_logo_path(team)
 
-logo_html = ""
-if logo_b64:
-    logo_html = f'<img class="team-logo" src="data:image/png;base64,{logo_b64}" alt="{team_name} logo" />'
+st.markdown('<div class="banner-shell">', unsafe_allow_html=True)
 
-banner_html = textwrap.dedent(f"""
-<div class="main-banner">
-<div class="banner-grid">
-<div>
-<div style="font-size:1.7rem; font-weight:700;">CFL Play Frequency Outliers</div>
-<div style="opacity:0.92; margin-top:0.25rem;">
-A data-driven model used to anticipate offensive tendencies.
-</div>
-</div>
+col1, col2, col3 = st.columns([1.6, 0.7, 1.1])
 
-<div class="banner-center">
-{logo_html}
-<div>
-<div class="banner-team-name">{team_name}</div>
-<div class="banner-team-sub">Selected scouting profile</div>
-</div>
-</div>
+with col1:
+    st.markdown(
+        """
+        <div class="banner-title">CFL Play Frequency Outliers</div>
+        <div class="banner-subtitle">A data-driven model used to anticipate offensive tendencies.</div>
+        """,
+        unsafe_allow_html=True
+    )
 
-<div class="banner-right">
-<span class="small-pill">Model: {METRICS['model_type']}</span>
-<span class="small-pill">2024 CFL Data</span>
-<span class="small-pill">v10.20250323</span>
-</div>
-</div>
-</div>
-""")
+with col2:
+    if logo_path:
+        st.image(str(logo_path), width=110)
+    else:
+        st.empty()
 
-st.markdown(banner_html, unsafe_allow_html=True)
+with col3:
+    st.markdown(
+        f"""
+        <div class="banner-team-name">{team_name}</div>
+        <div class="banner-team-label">Selected scouting profile</div>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 with st.sidebar:
     st.header("Game Inputs")
