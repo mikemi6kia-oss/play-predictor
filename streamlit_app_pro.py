@@ -53,8 +53,8 @@ TEAM_NAMES = {
 }
 
 TEAM_LOGOS = {
-    "BC": "assets/logos/bc.png",
-    "CGY": "assets/logos/cgy.png",
+    "BC": "assets/logos/BC.png",
+    "CGY": "assets/logos/cal.png",
     "EDM": "assets/logos/edm.png",
     "HAM": "assets/logos/Ham.png",
     "MTL": "assets/logos/mtl.png",
