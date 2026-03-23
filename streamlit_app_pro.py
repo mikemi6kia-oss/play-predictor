@@ -304,6 +304,7 @@ st.markdown(f"""
     padding-top: 1.0rem;
     padding-bottom: 1.0rem;
 }}
+
 .main-banner {{
     background: linear-gradient(135deg, {colors['bg']} 0%, #0f172a 100%);
     color: {colors['fg']};
@@ -311,6 +312,7 @@ st.markdown(f"""
     border-radius: 18px;
     margin-bottom: 1rem;
 }}
+
 .small-pill {{
     display: inline-block;
     padding: 0.35rem 0.7rem;
@@ -319,11 +321,29 @@ st.markdown(f"""
     margin-right: 0.4rem;
     font-size: 0.9rem;
 }}
+
 div[data-testid="stMetric"] {{
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     padding: 10px 14px;
     border-radius: 16px;
+}}
+
+/* Metric label */
+div[data-testid="stMetric"] label,
+div[data-testid="stMetric"] [data-testid="stMetricLabel"] {{
+    color: #334155 !important;
+}}
+
+/* Metric value */
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {{
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}}
+
+/* Metric delta text if ever used */
+div[data-testid="stMetric"] [data-testid="stMetricDelta"] {{
+    color: #475569 !important;
 }}
 </style>
 """, unsafe_allow_html=True)
