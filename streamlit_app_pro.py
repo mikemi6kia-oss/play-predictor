@@ -9,7 +9,7 @@ import streamlit as st
 BASE = Path(__file__).resolve().parent
 
 st.set_page_config(
-    page_title="CFL Live Play Predictor Pro",
+    page_title="CFL Play Frequency Outliers",
     page_icon="🏈",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -45,10 +45,20 @@ def load_metrics():
     with open(BASE / "cfl_model_metrics.json", "r") as f:
         return json.load(f)
 
+@st.cache_data
+def load_scouting_report():
+    path = BASE / "CFL_EXEC_SCOUTING_REPORT.xlsx"
+    if path.exists():
+        df = pd.read_excel(path)
+        df.columns = [c.strip() for c in df.columns]
+        return df
+    return pd.DataFrame()
+
 MODEL = load_model()
 TEAM_LOOKUP = load_team_lookup()
 COMPS = load_comparables()
 METRICS = load_metrics()
+SCOUTING = load_scouting_report()
 
 TEAMS = sorted(TEAM_LOOKUP["possession_team"].dropna().astype(str).unique().tolist())
 
@@ -321,7 +331,7 @@ st.markdown(f"""
         <div>
             <span class="small-pill">Model: {METRICS['model_type']}</span>
             <span class="small-pill">2024 Data</span>
-            <span class="small-pill">v8.20260310</span>
+            <span class="small-pill">v1.0</span>
         </div>
     </div>
 </div>
@@ -429,43 +439,20 @@ with right:
 
 st.divider()
 
-st.subheader("Top 5 high-confidence tendencies per team")
+tab1, tab2 = st.tabs(["Top 5 Model Tendencies", "Scouting Insights"])
 
-if st.button("Generate top 5 tendencies"):
-    scan_df = scan_high_confidence_tendencies()
+with tab1:
+    st.subheader("Top 5 high-confidence tendencies per team")
 
-    if scan_df.empty:
-        st.info("No high-confidence model tendencies found with the current thresholds.")
-    else:
-        top5_df = scan_df.groupby("team", group_keys=False).head(5).copy()
+    if st.button("Generate top 5 tendencies"):
+        scan_df = scan_high_confidence_tendencies()
 
-        display_df = top5_df[[
-            "team",
-            "rank_within_team",
-            "tendency",
-            "delta_vs_league",
-            "model_pass_prob",
-            "league_pass_rate",
-            "quarter",
-            "minutes",
-            "seconds",
-            "down",
-            "yards_to_go",
-            "field_side",
-            "ball_on",
-            "score_diff",
-            "team_plays",
-            "league_plays",
-            "scenario_label",
-        ]].copy()
+        if scan_df.empty:
+            st.info("No high-confidence model tendencies found with the current thresholds.")
+        else:
+            top5_df = scan_df.groupby("team", group_keys=False).head(5).copy()
 
-        display_df["delta_vs_league"] = display_df["delta_vs_league"].map(lambda x: f"{x:+.1%}")
-        display_df["model_pass_prob"] = display_df["model_pass_prob"].map(lambda x: f"{x:.1%}")
-        display_df["league_pass_rate"] = display_df["league_pass_rate"].map(lambda x: f"{x:.1%}")
-        display_df["clock"] = display_df.apply(lambda r: f'{int(r["minutes"])}:{int(r["seconds"]):02d}', axis=1)
-
-        st.dataframe(
-            display_df[[
+            display_df = top5_df[[
                 "team",
                 "rank_within_team",
                 "tendency",
@@ -473,7 +460,8 @@ if st.button("Generate top 5 tendencies"):
                 "model_pass_prob",
                 "league_pass_rate",
                 "quarter",
-                "clock",
+                "minutes",
+                "seconds",
                 "down",
                 "yards_to_go",
                 "field_side",
@@ -482,18 +470,90 @@ if st.button("Generate top 5 tendencies"):
                 "team_plays",
                 "league_plays",
                 "scenario_label",
-            ]],
-            use_container_width=True,
-            height=520
-        )
+            ]].copy()
 
-        csv_data = top5_df.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            "Download top 5 tendencies per team (CSV)",
-            data=csv_data,
-            file_name="cfl_top_5_tendencies_per_team.csv",
-            mime="text/csv"
-        )
+            display_df["delta_vs_league"] = display_df["delta_vs_league"].map(lambda x: f"{x:+.1%}")
+            display_df["model_pass_prob"] = display_df["model_pass_prob"].map(lambda x: f"{x:.1%}")
+            display_df["league_pass_rate"] = display_df["league_pass_rate"].map(lambda x: f"{x:.1%}")
+            display_df["clock"] = display_df.apply(lambda r: f'{int(r["minutes"])}:{int(r["seconds"]):02d}', axis=1)
+
+            st.dataframe(
+                display_df[[
+                    "team",
+                    "rank_within_team",
+                    "tendency",
+                    "delta_vs_league",
+                    "model_pass_prob",
+                    "league_pass_rate",
+                    "quarter",
+                    "clock",
+                    "down",
+                    "yards_to_go",
+                    "field_side",
+                    "ball_on",
+                    "score_diff",
+                    "team_plays",
+                    "league_plays",
+                    "scenario_label",
+                ]],
+                use_container_width=True,
+                height=520
+            )
+
+            csv_data = top5_df.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                "Download top 5 tendencies per team (CSV)",
+                data=csv_data,
+                file_name="cfl_top_5_tendencies_per_team.csv",
+                mime="text/csv"
+            )
+
+with tab2:
+    st.subheader("Scouting insights")
+    if SCOUTING.empty:
+        st.info("Scouting report file not found. Add CFL_EXEC_SCOUTING_REPORT.xlsx to the app folder.")
+    else:
+        scouting_team_col = "possession_team" if "possession_team" in SCOUTING.columns else "team"
+        scouting_team = st.selectbox("Select team for scouting report", sorted(SCOUTING[scouting_team_col].dropna().unique()))
+
+        team_report = SCOUTING[SCOUTING[scouting_team_col] == scouting_team].copy()
+
+        if team_report.empty:
+            st.info("No scouting rows found for this team.")
+        else:
+            display_cols = [c for c in [
+                "quarter",
+                "down",
+                "field_zone",
+                "ytg_bucket",
+                "score_bucket",
+                "plays",
+                "pass_rate",
+                "td_rate",
+                "league_pass_rate",
+                "league_td_rate",
+                "pass_delta",
+                "td_delta",
+                "alert",
+                "rank",
+            ] if c in team_report.columns]
+
+            pretty = team_report.copy()
+
+            for col in ["pass_rate", "td_rate", "league_pass_rate", "league_td_rate", "pass_delta", "td_delta"]:
+                if col in pretty.columns:
+                    pretty[col] = pretty[col].apply(lambda x: f"{x:.1f}%" if pd.notna(x) else "")
+
+            st.dataframe(pretty[display_cols], use_container_width=True, height=320)
+
+            if "play_examples" in team_report.columns:
+                st.markdown("### Referenced play descriptions")
+                for _, row in team_report.iterrows():
+                    title = f'Rank {int(row["rank"])} | Q{int(row["quarter"])} | Down {int(row["down"])} | {row["field_zone"]} | {row["ytg_bucket"]}'
+                    with st.expander(title):
+                        examples = str(row["play_examples"]).split(" || ")
+                        for i, ex in enumerate(examples, start=1):
+                            st.write(f"{i}. {ex}")
 
 st.divider()
 
