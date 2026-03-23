@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import base64
+import textwrap
 
 def get_logo_base64(team_code):
     logo_path = BASE / TEAM_LOGOS.get(team_code, "")
