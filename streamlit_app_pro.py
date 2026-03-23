@@ -47,11 +47,20 @@ def load_metrics():
 
 @st.cache_data
 def load_scouting_report():
-    path = BASE / "CFL_EXEC_SCOUTING_REPORT.xlsx"
-    if path.exists():
-        df = pd.read_excel(path)
-        df.columns = [c.strip() for c in df.columns]
-        return df
+    possible_paths = [
+        "CFL_EXEC_SCOUTING_REPORT.xlsx",
+        BASE / "CFL_EXEC_SCOUTING_REPORT.xlsx"
+    ]
+
+    for path in possible_paths:
+        try:
+            df = pd.read_excel(path)
+            df.columns = [c.strip() for c in df.columns]
+            return df
+        except:
+            continue
+
+    st.error("Scouting report file not found in any expected location.")
     return pd.DataFrame()
 
 MODEL = load_model()
