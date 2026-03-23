@@ -50,11 +50,11 @@ TEAM_LOGOS = {
     "BC": "assets/logos/bc.png",
     "CGY": "assets/logos/cgy.png",
     "EDM": "assets/logos/edm.png",
-    "HAM": "assets/logos/ham.png",
+    "HAM": "assets/logos/Ham.png",
     "MTL": "assets/logos/mtl.png",
-    "OTT": "assets/logos/ott.png",
+    "OTT": "assets/logos/Ott.png",
     "SSK": "assets/logos/ssk.png",
-    "TOR": "assets/logos/tor.png",
+    "TOR": "assets/logos/Tor.png",
     "WPG": "assets/logos/wpg.png",
 }
 
