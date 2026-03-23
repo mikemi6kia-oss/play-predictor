@@ -415,19 +415,35 @@ div[data-testid="stMetric"] [data-testid="stMetricDelta"] {{
 </style>
 """, unsafe_allow_html=True)
 
+team_name = TEAM_NAMES.get(team, team)
+logo_b64 = get_logo_base64(team)
+
+logo_html = ""
+if logo_b64:
+    logo_html = f'<img class="team-logo" src="data:image/png;base64,{logo_b64}" alt="{team_name} logo" />'
+
 st.markdown(f"""
 <div class="main-banner">
-    <div style="display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap:wrap;">
+    <div class="banner-grid">
         <div>
             <div style="font-size:1.7rem; font-weight:700;">CFL Play Frequency Outliers</div>
             <div style="opacity:0.92; margin-top:0.25rem;">
                 A data-driven model used to anticipate offensive tendencies.
             </div>
         </div>
-        <div>
+
+        <div class="banner-center">
+            {logo_html}
+            <div>
+                <div class="banner-team-name">{team_name}</div>
+                <div class="banner-team-sub">Selected scouting profile</div>
+            </div>
+        </div>
+
+        <div class="banner-right">
             <span class="small-pill">Model: {METRICS['model_type']}</span>
             <span class="small-pill">2024 CFL Data</span>
-            <span class="small-pill">v10.20250323</span>
+            <span class="small-pill">v1.0.20250323</span>
         </div>
     </div>
 </div>
