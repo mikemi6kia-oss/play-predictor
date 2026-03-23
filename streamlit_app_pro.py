@@ -47,13 +47,12 @@ def load_metrics():
 
 @st.cache_data
 def load_scouting_report():
-    try:
-        df = pd.read_excel("CFL_EXEC_SCOUTING_REPORT.xlsx")
+    path = BASE / "CFL_EXEC_SCOUTING_REPORT.xlsx"
+    if path.exists():
+        df = pd.read_excel(path)
         df.columns = [c.strip() for c in df.columns]
         return df
-    except Exception as e:
-        st.error(f"Error loading scouting report: {e}")
-        return pd.DataFrame()
+    return pd.DataFrame()
 
 MODEL = load_model()
 TEAM_LOOKUP = load_team_lookup()
