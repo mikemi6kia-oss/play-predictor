@@ -353,8 +353,6 @@ st.markdown(f"""
     font-size: 0.9rem;
 }}
 
-👉 ADD THIS PART RIGHT HERE 👇
-
 .banner-grid {{
     display: grid;
     grid-template-columns: 1.2fr 0.9fr 0.9fr;
@@ -373,6 +371,7 @@ st.markdown(f"""
 .banner-team-name {{
     font-size: 1.15rem;
     font-weight: 700;
+    line-height: 1.2;
 }}
 
 .banner-team-sub {{
@@ -393,8 +392,6 @@ st.markdown(f"""
     text-align: right;
 }}
 
-👉 END OF NEW PART
-
 div[data-testid="stMetric"] {{
     background: #f8fafc;
     border: 1px solid #e2e8f0;
@@ -402,15 +399,21 @@ div[data-testid="stMetric"] {{
     border-radius: 16px;
 }}
 
+div[data-testid="stMetric"] label,
+div[data-testid="stMetric"] [data-testid="stMetricLabel"] {{
+    color: #334155 !important;
+}}
+
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {{
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}}
+
+div[data-testid="stMetric"] [data-testid="stMetricDelta"] {{
+    color: #475569 !important;
+}}
 </style>
 """, unsafe_allow_html=True)
-
-team_name = TEAM_NAMES.get(team, team)
-logo_b64 = get_logo_base64(team)
-
-logo_html = ""
-if logo_b64:
-    logo_html = f'<img class="team-logo" src="data:image/png;base64,{logo_b64}" alt="{team_name} logo" />'
 
 team_name = TEAM_NAMES.get(team, team)
 logo_b64 = get_logo_base64(team)
