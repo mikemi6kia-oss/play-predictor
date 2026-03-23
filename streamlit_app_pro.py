@@ -344,12 +344,51 @@ st.markdown(f"""
     margin-bottom: 1rem;
 }}
 
+.banner-grid {{
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr;
+    align-items: center;
+    gap: 1rem;
+}}
+
+.banner-center {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    text-align: center;
+}}
+
+.banner-team-name {{
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.2;
+}}
+
+.banner-team-sub {{
+    font-size: 0.82rem;
+    opacity: 0.88;
+}}
+
+.team-logo {{
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    padding: 6px;
+}}
+
+.banner-right {{
+    text-align: right;
+}}
+
 .small-pill {{
     display: inline-block;
     padding: 0.35rem 0.7rem;
     border-radius: 999px;
     background: rgba(255,255,255,0.16);
-    margin-right: 0.4rem;
+    margin-left: 0.4rem;
     font-size: 0.9rem;
 }}
 
@@ -360,19 +399,16 @@ div[data-testid="stMetric"] {{
     border-radius: 16px;
 }}
 
-/* Metric label */
 div[data-testid="stMetric"] label,
 div[data-testid="stMetric"] [data-testid="stMetricLabel"] {{
     color: #334155 !important;
 }}
 
-/* Metric value */
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {{
     color: #0f172a !important;
     font-weight: 700 !important;
 }}
 
-/* Metric delta text if ever used */
 div[data-testid="stMetric"] [data-testid="stMetricDelta"] {{
     color: #475569 !important;
 }}
