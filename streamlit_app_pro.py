@@ -5,6 +5,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import streamlit as st
+import base64
+
+def get_logo_base64(team_code):
+    logo_path = BASE / TEAM_LOGOS.get(team_code, "")
+    if logo_path.exists():
+        with open(logo_path, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+    return None
 
 BASE = Path(__file__).resolve().parent
 
@@ -25,6 +33,29 @@ TEAM_COLORS = {
     "SSK": {"bg": "#2E7D32", "fg": "#FFFFFF"},
     "TOR": {"bg": "#1976D2", "fg": "#FFFFFF"},
     "WPG": {"bg": "#003F87", "fg": "#FFFFFF"},
+}
+TEAM_NAMES = {
+    "BC": "BC Lions",
+    "CGY": "Calgary Stampeders",
+    "EDM": "Edmonton Elks",
+    "HAM": "Hamilton Tiger-Cats",
+    "MTL": "Montreal Alouettes",
+    "OTT": "Ottawa REDBLACKS",
+    "SSK": "Saskatchewan Roughriders",
+    "TOR": "Toronto Argonauts",
+    "WPG": "Winnipeg Blue Bombers",
+}
+
+TEAM_LOGOS = {
+    "BC": "assets/logos/bc.png",
+    "CGY": "assets/logos/cgy.png",
+    "EDM": "assets/logos/edm.png",
+    "HAM": "assets/logos/ham.png",
+    "MTL": "assets/logos/mtl.png",
+    "OTT": "assets/logos/ott.png",
+    "SSK": "assets/logos/ssk.png",
+    "TOR": "assets/logos/tor.png",
+    "WPG": "assets/logos/wpg.png",
 }
 
 @st.cache_resource
